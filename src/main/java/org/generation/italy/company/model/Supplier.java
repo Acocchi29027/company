@@ -33,6 +33,11 @@ public class Supplier {
 
     public Supplier(){}
 
+    public Supplier(Integer supplierId, String companyName){
+        this.supplierId = supplierId;
+        this.companyName = companyName;
+    }
+
     public Supplier(Integer supplierId, String companyName, String contactName, String contactTitle, String address, String city, String region, String postalCode, String country, String phone, String fax) {
         this.supplierId = supplierId;
         this.companyName = companyName;
