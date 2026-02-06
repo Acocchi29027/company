@@ -59,4 +59,13 @@ public class ProductServiceJpa implements ProductService {
     public List<Product> findByProductNameAndIsDiscontinued(String name, Boolean discontinued) {
         return repo.findByProductNameAndIsDiscontinued(name, discontinued);
     }
+
+    @Override
+    public boolean update(Product product) {
+        if(!repo.existsById(product.getProductId())){
+            return false;
+        }
+        repo.save(product);
+        return true;
+    }
 }

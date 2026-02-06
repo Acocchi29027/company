@@ -1,6 +1,7 @@
 package org.generation.italy.company.controller;
 
 import org.generation.italy.company.dto.ProductDTO;
+import org.generation.italy.company.dto.ProductSummaryDTO;
 import org.generation.italy.company.model.Category;
 import org.generation.italy.company.model.Product;
 import org.generation.italy.company.service.abstraction.ProductService;
@@ -70,5 +71,18 @@ public class ProductController {
         ProductDTO dto = fromProduct(created);
         URI location = URI.create("/api/products/" + created.getProductId());
         return ResponseEntity.created(location).body(dto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable int id, @RequestBody ProductSummaryDTO productSummaryDto){
+        if(id != productSummaryDto.getProductId()){
+            return ResponseEntity.badRequest().build();
+        }
+        Product product = productSummaryDto.toEntity();
+        boolean updated = service.update(product);
+        if(!updated){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(fromProduct(product));
     }
 }
