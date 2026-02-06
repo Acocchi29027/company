@@ -16,7 +16,8 @@ import static org.generation.italy.company.dto.ProductDTO.*;
 
 @RestController
 @RequestMapping("/api/products")
-public class ProductController {
+public class
+ProductController {
     private ProductService service;
 
     @Autowired
