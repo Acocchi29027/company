@@ -85,9 +85,29 @@ public class Customer {
         return fax;
     }
 
-    public void setCustId(int custId) {
+    public void setCustId(Integer custId) {
         this.custId = custId;
     }
+
+    public void setCompanyName(String companyName) {this.companyName = companyName;}
+
+    public void setContactName(String contactName) {this.contactName = contactName;}
+
+    public void setContactTitle(String contactTitle) {this.contactTitle = contactTitle;}
+
+    public void setAddress(String address) {this.address = address;}
+
+    public void setCity(String city) {this.city = city;}
+
+    public void setRegion(String region) {this.region = region;}
+
+    public void setPostalCode(String postalCode) {this.postalCode = postalCode;}
+
+    public void setCountry(String country) {this.country = country;}
+
+    public void setPhone(String phone) {this.phone = phone;}
+
+    public void setFax(String fax) {this.fax = fax;}
 
     @Override
     public String toString() {
