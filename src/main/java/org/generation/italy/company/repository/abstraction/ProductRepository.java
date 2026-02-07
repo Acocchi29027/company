@@ -8,8 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-    List<Product> findByProductNameContaining(String name);
-    List<Product> findByDiscontinued(boolean discontinued);
+
     @Query("""
             SELECT p FROM Product p
             WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))
@@ -23,4 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             AND p.discontinued = 0
             """)
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);
+    List<Product> findByProductNameContaining(String name);
+    List<Product> findByDiscontinued(boolean discontinued);
 }
