@@ -22,7 +22,11 @@ public class ProductSummaryDTO {
         this.unitprice = unitprice;
         this.discontinued = discontinued;
     }
-
+    public static ProductSummaryDTO summaryFromProduct(Product product){
+        return new ProductSummaryDTO(product.getProductId(),product.getProductName(),
+                product.getSupplier().getSupplierId(),product.getCategory().getCategoryId(),
+                product.getUnitprice(),product.isDiscontinued());
+    }
     public Integer getProductId() {
         return productId;
     }
