@@ -11,7 +11,7 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
     @Query("""
-            SELECT c FROM Customer c 
+            SELECT c FROM Customer c
             WHERE c.city = :city
             """)
     List <Customer> findByCityName (@Param("city")String city);

@@ -12,8 +12,8 @@ import java.util.Optional;
 public class CustomerServiceJpa  implements CustomerService {
 
     private CustomerRepository repo;
-    @Autowired
 
+    @Autowired
     public CustomerServiceJpa(CustomerRepository repo) {
         this.repo = repo;
         System.out.println("*************************************");
