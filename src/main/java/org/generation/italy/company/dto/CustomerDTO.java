@@ -12,9 +12,10 @@ public class CustomerDTO extends CustomerSummaryDTO {
 
     public CustomerDTO() {}
 
-    public CustomerDTO(Integer custId, String companyName, String contactName, String contactTitle,
-                       String address, String city, String region, String postalCode,
-                       String country, String phone, String fax) {
+    public CustomerDTO(Integer custId, String companyName, String contactName,
+                       String city, String country, String phone,
+                       String contactTitle, String address, String region,
+                       String postalCode, String fax) {
         super(custId, companyName, contactName, city, country, phone);
         this.contactTitle = contactTitle;
         this.address = address;
@@ -28,32 +29,26 @@ public class CustomerDTO extends CustomerSummaryDTO {
                 c.getCustId(),
                 c.getCompanyName(),
                 c.getContactName(),
-                c.getContactTitle(),
-                c.getAddress(),
                 c.getCity(),
-                c.getRegion(),
-                c.getPostalCode(),
                 c.getCountry(),
                 c.getPhone(),
+                c.getContactTitle(),
+                c.getAddress(),
+                c.getRegion(),
+                c.getPostalCode(),
                 c.getFax()
         );
     }
 
     @Override
     public Customer toEntity() {
-        return new Customer(
-                custId,
-                companyName,
-                contactName,
-                contactTitle,
-                address,
-                city,
-                region,
-                postalCode,
-                country,
-                phone,
-                fax
-        );
+        Customer customer = super.toEntity();
+        customer.setContactTitle(contactTitle);
+        customer.setAddress(address);
+        customer.setRegion(region);
+        customer.setPostalCode(postalCode);
+        customer.setFax(fax);
+        return customer;
     }
 
     public String getContactTitle() {

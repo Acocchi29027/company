@@ -11,7 +11,7 @@ public class CustomerSummaryDTO {
     protected String country;
     protected String phone;
 
-    public CustomerSummaryDTO() {}
+    public CustomerSummaryDTO(){}
 
     public CustomerSummaryDTO(Integer custId, String companyName, String contactName,
                               String city, String country, String phone) {
@@ -23,14 +23,14 @@ public class CustomerSummaryDTO {
         this.phone = phone;
     }
 
-    public static CustomerSummaryDTO summaryFromCustomer(Customer c) {
+    public static CustomerSummaryDTO summaryFromCustomer(Customer customer){
         return new CustomerSummaryDTO(
-                c.getCustId(),
-                c.getCompanyName(),
-                c.getContactName(),
-                c.getCity(),
-                c.getCountry(),
-                c.getPhone()
+                customer.getCustId(),
+                customer.getCompanyName(),
+                customer.getContactName(),
+                customer.getCity(),
+                customer.getCountry(),
+                customer.getPhone()
         );
     }
 
@@ -82,23 +82,19 @@ public class CustomerSummaryDTO {
         this.phone = phone;
     }
 
-    /**
-     * Se mai ti serve convertire un "summary" in entity (campi extra = null).
-     * Di solito per CREATE/UPDATE userai CustomerDTO.
-     */
-    public Customer toEntity() {
+    public Customer toEntity(){
         return new Customer(
                 custId,
                 companyName,
                 contactName,
-                null,     // contactTitle
-                null,     // address
+                null,   // contactTitle
+                null,   // address
                 city,
-                null,     // region
-                null,     // postalCode
+                null,   // region
+                null,   // postalCode
                 country,
                 phone,
-                null      // fax
+                null    // fax
         );
     }
 }

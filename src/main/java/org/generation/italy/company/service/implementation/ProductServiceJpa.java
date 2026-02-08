@@ -42,7 +42,8 @@ public class ProductServiceJpa implements ProductService {
 
     @Override
     public Product create(Product p) {
-        return repo.save(p);
+         repo.save(p);
+         return p;
     }
 
     @Override

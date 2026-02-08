@@ -41,6 +41,16 @@ public class Customer {
         this.fax = fax;
     }
 
+    public Customer(Integer custId, String companyName, String contactName,
+                    String city, String country, String phone) {
+        this.custId = custId;
+        this.companyName = companyName;
+        this.contactName = contactName;
+        this.city = city;
+        this.country = country;
+        this.phone = phone;
+    }
+
     public Integer getCustId() {
         return custId;
     }
@@ -83,6 +93,50 @@ public class Customer {
 
     public String getFax() {
         return fax;
+    }
+
+    public void setCustId(Integer custId) {
+        this.custId = custId;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactTitle(String contactTitle) {
+        this.contactTitle = contactTitle;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public void setCustId(int custId) {
