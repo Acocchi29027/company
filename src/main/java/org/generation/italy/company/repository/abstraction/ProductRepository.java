@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("""
             SELECT p FROM Product p
             WHERE p.unitprice BETWEEN :min AND :max
-            AND p.discontinued = 0
+            AND p.discontinued = true
             """)
     //seguendo dei pattern per i nomi dei metodi
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);

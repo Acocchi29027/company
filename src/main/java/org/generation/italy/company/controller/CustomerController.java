@@ -1,7 +1,6 @@
 package org.generation.italy.company.controller;
 
 import org.generation.italy.company.dto.CustomerDTO;
-import org.generation.italy.company.dto.CustomerSummaryDTO;
 import org.generation.italy.company.model.Customer;
 import org.generation.italy.company.service.abstraction.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static org.generation.italy.company.dto.CustomerSummaryDTO.summaryFromCustomer;
-import static org.generation.italy.company.dto.ProductSummaryDTO.summaryFromProduct;
+import static org.generation.italy.company.dto.CustomerDTO.summaryFromCustomer;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -40,24 +39,33 @@ public class CustomerController {
         return ResponseEntity.notFound().build();
     }
     @PostMapping
-    public ResponseEntity<CustomerSummaryDTO> create(@RequestBody CustomerSummaryDTO customerSummaryDTO){
-        Customer customer = customerSummaryDTO.toEntity();
+    public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO){
+        Customer customer = customerDTO.toEntity();
         Customer created = service.create(customer);
-        CustomerSummaryDTO dto = summaryFromCustomer(created);
+        CustomerDTO dto = summaryFromCustomer(created);
         URI location = URI.create("/api/customers/" + created.getCustId());
         return ResponseEntity.created(location).body(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CustomerSummaryDTO customerSummaryDTO){
-        if (id != customerSummaryDTO.getCustId()){
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CustomerDTO customerDTO){
+        if (!Objects.equals(id, customerDTO.getCustId())){
+            customerDTO.setCustId(id);
         }
-        Customer customer = customerSummaryDTO.toEntity();
+        Customer customer = customerDTO.toEntity();
         boolean updated = service.update(customer);
         if (!updated){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(summaryFromCustomer(customer));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Integer id){
+        boolean deleted = service.deleteById(id);
+        if (!deleted){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

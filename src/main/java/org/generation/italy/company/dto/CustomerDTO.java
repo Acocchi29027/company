@@ -2,26 +2,107 @@ package org.generation.italy.company.dto;
 
 import org.generation.italy.company.model.Customer;
 
-public class CustomerDTO extends CustomerSummaryDTO {
+public class CustomerDTO {
 
-    private String contactTitle;
-    private String address;
-    private String region;
-    private String postalCode;
-    private String fax;
+    protected Integer custId;
+    protected String companyName;
+    protected String contactName;
+    protected String city;
+    protected String country;
+    protected String phone;
+    protected String contactTitle;
+    protected String address;
+    protected String region;
+    protected String postalCode;
+    protected String fax;
 
-    public CustomerDTO() {}
 
-    public CustomerDTO(Integer custId, String companyName, String contactName,
-                       String city, String country, String phone,
-                       String contactTitle, String address, String region,
-                       String postalCode, String fax) {
-        super(custId, companyName, contactName, city, country, phone);
+    public CustomerDTO(Integer custId,
+                       String companyName,
+                       String contactName,
+                       String city,
+                       String country,
+                       String phone,
+                       String contactTitle,
+                       String address,
+                       String region,
+                       String postalCode,
+                       String fax) {
+        this.custId = custId;
+        this.companyName = companyName;
+        this.contactName = contactName;
+        this.city = city;
+        this.country = country;
+        this.phone = phone;
         this.contactTitle = contactTitle;
         this.address = address;
         this.region = region;
         this.postalCode = postalCode;
         this.fax = fax;
+    }
+
+    public static CustomerDTO summaryFromCustomer(Customer customer) {
+        return new CustomerDTO(
+                customer.getCustId(),
+                customer.getCompanyName(),
+                customer.getContactName(),
+                customer.getCity(),
+                customer.getCountry(),
+                customer.getPhone(),
+                customer.getContactTitle(),
+                customer.getAddress(),
+                customer.getRegion(),
+                customer.getPostalCode(),
+                customer.getFax()
+        );
+    }
+
+    public Integer getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Integer custId) {
+        this.custId = custId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public static CustomerDTO fromCustomer(Customer c) {
@@ -40,15 +121,20 @@ public class CustomerDTO extends CustomerSummaryDTO {
         );
     }
 
-    @Override
     public Customer toEntity() {
-        Customer customer = super.toEntity();
-        customer.setContactTitle(contactTitle);
-        customer.setAddress(address);
-        customer.setRegion(region);
-        customer.setPostalCode(postalCode);
-        customer.setFax(fax);
-        return customer;
+        return new Customer(
+                custId,
+                companyName,
+                contactName,
+                contactTitle,   // contactTitle
+                address,   // address
+                city,
+                region,   // region
+                postalCode,   // postalCode
+                country,
+                phone,
+                fax    // fax
+        );
     }
 
     public String getContactTitle() {

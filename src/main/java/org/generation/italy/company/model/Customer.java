@@ -2,6 +2,8 @@ package org.generation.italy.company.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -23,6 +25,18 @@ public class Customer {
     private String country;
     private String phone;
     private String fax;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(custId, customer.custId) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(contactTitle, customer.contactTitle) && Objects.equals(address, customer.address) && Objects.equals(city, customer.city) && Objects.equals(region, customer.region) && Objects.equals(postalCode, customer.postalCode) && Objects.equals(country, customer.country) && Objects.equals(phone, customer.phone) && Objects.equals(fax, customer.fax);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(custId, companyName, contactName, contactTitle, address, city, region, postalCode, country, phone, fax);
+    }
 
     public Customer(){}
 
