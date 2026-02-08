@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-
+    //modi per far implementare automaticmanete dei metodi più avanzati rispetto ai classici metodi CRUD
+    //scrivendo la query
     @Query("""
             SELECT p FROM Product p
             WHERE LOWER(p.productName) LIKE LOWER(CONCAT('%', :name, '%'))
@@ -21,6 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             WHERE p.unitprice BETWEEN :min AND :max
             AND p.discontinued = 0
             """)
+    //seguendo dei pattern per i nomi dei metodi
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);
     List<Product> findByProductNameContaining(String name);
     List<Product> findByDiscontinued(boolean discontinued);

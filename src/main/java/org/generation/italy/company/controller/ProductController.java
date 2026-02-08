@@ -29,11 +29,6 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> findProducts(@RequestParam(required = false) String name,
                                          @RequestParam(required = false) Boolean discontinued) {
-//        return List.of(new Product(2, " ", null, new Category(1, "Beverages",
-//                        "Beviamoci sopra"), 100, false),
-//                new Product(3, " ", null, new Category(1, "Beverages", "Beviamoci sopra"), 100,
-//                        true)
-//                );
         List<Product> products;
         if(name == null && discontinued == null) {
             products = service.findAll();

@@ -79,4 +79,5 @@ public class ProductSummaryDTO {
         return new Product(productId, productName, new Supplier(supplierId, null),
                 new Category(categoryId, null, null), unitprice, discontinued);
     }
+
 }
