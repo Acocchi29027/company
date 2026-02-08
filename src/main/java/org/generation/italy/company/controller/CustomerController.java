@@ -1,7 +1,9 @@
 package org.generation.italy.company.controller;
 
 import org.generation.italy.company.dto.CustomerDTO;
+import org.generation.italy.company.dto.ProductSummaryDTO;
 import org.generation.italy.company.model.Customer;
+import org.generation.italy.company.model.Product;
 import org.generation.italy.company.service.abstraction.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import static org.generation.italy.company.dto.ProductSummaryDTO.summaryFromProduct;
 
 @RestController
 @RequestMapping("api/customers")
@@ -33,15 +37,6 @@ public class CustomerController {
         }
         return customers.stream().map(CustomerDTO::summaryFromCustomer).toList();
     }
-
-    //    @GetMapping("/{id}")
-//    public ResponseEntity<?> findById(@PathVariable int id) {
-//        Optional<Product> op = service.findById(id);
-//        if (op.isPresent()) {
-//            return ResponseEntity.ok(fromProduct(op.get()));
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable int id) {
         Optional<Customer> op = service.findById(id);
@@ -51,14 +46,14 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
     }
-//    @PostMapping
-//    public ResponseEntity<ProductSummaryDTO> create(@RequestBody ProductSummaryDTO productSummaryDto) {
-//        Product product = productSummaryDto.toEntity();
-//        Product created = service.create(product);
-//        ProductSummaryDTO dto = summaryFromProduct(product);
-//        URI location = URI.create("/api/products/" + created.getProductId());
-//        return ResponseEntity.created(location).body(dto);
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable int id){
+        boolean deleted = service.deleteById(id);
+        if(deleted){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
     @PostMapping
     public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO){
         Customer customer = customerDTO.toEntity();
@@ -66,6 +61,18 @@ public class CustomerController {
         CustomerDTO dto = CustomerDTO.summaryFromCustomer(customer);
         URI location = URI.create("/api/customers/" + cCreated.getCustId());
         return ResponseEntity.created(location).body(dto);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable int id,@RequestBody CustomerDTO customerDTO){
+        if(id != customerDTO.getCustId()){
+            return ResponseEntity.badRequest().body("l'id inserito non ha corrispondenze");
+        }
+        Customer c = customerDTO.toEntity();
+        boolean updated = service.update(c);
+        if(!updated){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(CustomerDTO.summaryFromCustomer(c));
     }
 }
 
