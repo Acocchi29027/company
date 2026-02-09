@@ -8,9 +8,9 @@ public class OrderDetails {
     @EmbeddedId
     private OrderDetailsId id;
 
-    @ManyToOne
-    @JoinColumn(name = "orderid")
-    @MapsId("orderId")
+    @ManyToOne //più orderid per un orderdetail
+    @JoinColumn(name = "orderid") //indica che è una chiave esterna
+    @MapsId("orderId") //
     private Order order;
 
     @ManyToOne
