@@ -1,5 +1,7 @@
 package org.generation.italy.company.dto;
 
+import org.generation.italy.company.model.Customer;
+
 public class CustomerSummaryDTO {
     private Integer custId;
     private String companyName;
@@ -64,5 +66,14 @@ public class CustomerSummaryDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public static CustomerSummaryDTO fromCustomer(Customer c) {
+        return new CustomerSummaryDTO(c.getCustId(), c.getCompanyName(), c.getAddress(), c.getCity(), c.getCountry(),
+                c.getPhone());
+    }
+
+    public Customer toEntity() {
+        return new Customer(custId, companyName, null, null, address, city, null, null, country, phone, null);
     }
 }

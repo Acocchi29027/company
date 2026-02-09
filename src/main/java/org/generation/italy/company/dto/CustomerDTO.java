@@ -25,4 +25,10 @@ public class CustomerDTO extends CustomerSummaryDTO{
                 c.getAddress(), c.getCity(), c.getRegion(), c.getPostalCode(), c.getCountry(), c.getPhone(),
                 c.getFax());
     }
+
+    @Override
+    public Customer toEntity() {
+        return new Customer(getCustId(), getCompanyName(), contactName, contactTitle, getAddress(), getCity(), region,
+                postalCode, getCountry(), getPhone(), fax);
+    }
 }
