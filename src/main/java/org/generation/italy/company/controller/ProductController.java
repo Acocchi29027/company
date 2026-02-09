@@ -69,7 +69,7 @@ public class ProductController {
     public ResponseEntity<ProductSummaryDTO> create(@RequestBody ProductSummaryDTO productSummaryDto) {
         Product product = productSummaryDto.toEntity();
         Product created = service.create(product);
-        ProductSummaryDTO dto = summaryFromProduct(product);
+        ProductSummaryDTO dto = summaryFromProduct(created);
         URI location = URI.create("/api/products/" + created.getProductId());
         return ResponseEntity.created(location).body(dto);
     }
