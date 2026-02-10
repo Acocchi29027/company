@@ -63,4 +63,23 @@ public class CustomerServiceJpa implements CustomerService {
         repo.deleteById(id);
         return true;
     }
+
+    @Override
+    public List<CustomerDTO> searchByCompanyName(String name) {
+        return repo.searchByCompanyName(name).stream()
+                .map(CustomerDTO::fromCustomer)
+                .toList();
+    }
+
+    @Override
+    public List<CustomerDTO> searchByContactName(String name) {
+        return repo.searchByContactName(name).stream()
+                .map(CustomerDTO::fromCustomer)
+                .toList();
+    }
+
+    @Override
+    public boolean existsByCompanyNameIgnoreCase(String companyName) {
+        return repo.searchByCompanyNameIgnoreCase(companyName);
+    }
 }

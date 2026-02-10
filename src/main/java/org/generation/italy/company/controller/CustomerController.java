@@ -48,7 +48,29 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         return service.deleteById(id)
-                ? ResponseEntity.noContent().build()
-                : ResponseEntity.notFound().build();
+                ? ResponseEntity.noContent().build() // se la condizione è true → ritorna 204 No Content (nessun body)
+                : ResponseEntity.notFound().build(); // se la condizione è false → ritorna 404 Not Found
     }
+
+    @GetMapping("/search/company/{name}")
+    public ResponseEntity<List<CustomerDTO>> searchByCompanyName(@PathVariable String name) {
+        List<CustomerDTO> result = service.searchByCompanyName(name);
+        if (result.isEmpty()) {
+            return ResponseEntity.noContent().build(); // se la condizione è true → ritorna 204 No Content (nessun body)
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/search/contact/{name}")
+    public ResponseEntity<List<CustomerDTO>> searchByContactName(@PathVariable String name){
+        List<CustomerDTO> result = service.searchByContactName(name);
+        if (result.isEmpty()){
+            return ResponseEntity.noContent().build(); // se la condizione è true → ritorna 204 No Content (nessun body)
+        }
+        return ResponseEntity.ok(result); //  ritorna 200 equivalente a --> return ResponseEntity.status(200).body(result);
+    }
+
+    
+
+
 }
