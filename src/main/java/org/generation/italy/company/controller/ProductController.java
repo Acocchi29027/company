@@ -13,7 +13,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static org.generation.italy.company.dto.ProductDTO.*;
+import static org.generation.italy.company.dto.ProductDTO.fromProduct;
+import static org.generation.italy.company.dto.ProductSummaryDTO.summaryFromProduct;
 
 @RestController
 @RequestMapping("/api/products")
@@ -65,10 +66,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDto) {
-        Product product = productDto.toEntity();
+    public ResponseEntity<ProductSummaryDTO> create(@RequestBody ProductSummaryDTO productSummaryDto) {
+        Product product = productSummaryDto.toEntity();
         Product created = service.create(product);
-        ProductDTO dto = fromProduct(created);
+        ProductSummaryDTO dto = summaryFromProduct(created);
         URI location = URI.create("/api/products/" + created.getProductId());
         return ResponseEntity.created(location).body(dto);
     }
@@ -83,6 +84,6 @@ public class ProductController {
         if (!updated){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(fromProduct(product));
+        return ResponseEntity.ok(summaryFromProduct(product));
     }
 }
