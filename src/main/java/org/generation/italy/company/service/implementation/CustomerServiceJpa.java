@@ -51,11 +51,11 @@ public class CustomerServiceJpa  implements CustomerService {
         return repo.findByCompanyname(companyName);
     }
     @Override
-    public boolean update(Customer customer) {
-        if (!repo.existsById(customer.getCustId())) {
+    public boolean update(Customer c) {
+        if (!repo.existsById(c.getCustId())) {
             return false;
         }
-        repo.save(customer);
+        repo.save(c);
         return true;
     }
 }
