@@ -68,4 +68,24 @@ public class ProductServiceJpa implements ProductService {
         repo.save(product);
         return true;
     }
+
+    @Override
+    public List<Product> findByCategoryName(String name) {
+        return repo.findByCategoryCategoryName(name);
+    }
+
+    @Override
+    public List<Product> findBySupplierCountry(String country) {
+        return repo.findBySupplierCountry(country);
+    }
+
+    @Override
+    public List<Product> findByUnitpriceGreaterThanAverageUnitprice(){
+        return repo.findByUnitpriceGreaterThanAverageUnitprice();
+    }
+
+    @Override
+    public List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory() {
+        return repo.findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+    }
 }

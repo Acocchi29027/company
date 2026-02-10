@@ -27,22 +27,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDTO> findProducts(@RequestParam(required = false) String name,
+    public List<ProductDTO> findProducts(@RequestParam(required = false) String categoryName,
+                                         @RequestParam(required = false) String supplierCountry,
+                                         @RequestParam(required = false) Boolean checkAveragePrice,
+                                         @RequestParam(required = false) Boolean checkSameCategory,
+                                         @RequestParam(required = false) String productName,
                                          @RequestParam(required = false) Boolean discontinued) {
-//        return List.of(new Product(2, " ", null, new Category(1, "Beverages",
-//                        "Beviamoci sopra"), 100, false),
-//                new Product(3, " ", null, new Category(1, "Beverages", "Beviamoci sopra"), 100,
-//                        true)
-//                );
         List<Product> products;
-        if(name == null && discontinued == null) {
+        if (categoryName != null) {
+            products = service.findByCategoryName(categoryName);
+        } else if (supplierCountry != null) {
+            products = service.findBySupplierCountry(supplierCountry);
+        } else if (checkAveragePrice && checkSameCategory == null) {
+            products = service.findByUnitpriceGreaterThanAverageUnitprice();
+        } else if (checkAveragePrice && checkSameCategory) {
+            products = service.findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+        } else if(productName == null && discontinued == null) {
             products = service.findAll();
-        } else if (name == null) {
+        } else if (productName == null) {
             products = service.findByDiscontinued(discontinued);
         } else if (discontinued == null) {
-            products = service.findByProductName(name);
+            products = service.findByProductName(productName);
         } else {
-            products = service.findByProductNameAndIsDiscontinued(name, discontinued);
+            products = service.findByProductNameAndIsDiscontinued(productName, discontinued);
         }
         return products.stream().map(ProductDTO::fromProduct).toList();
     }

@@ -14,6 +14,9 @@ public interface ProductService {
     List<Product> findByProductName(String name);
     List<Product> findByDiscontinued(Boolean discontinued);
     List<Product> findByProductNameAndIsDiscontinued(String name, Boolean discontinued);
-
     boolean update(Product product);
+    List<Product> findByCategoryName(String name);
+    List<Product> findBySupplierCountry(String country);
+    List<Product> findByUnitpriceGreaterThanAverageUnitprice();
+    List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
 }

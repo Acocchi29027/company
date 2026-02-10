@@ -16,14 +16,38 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     List<Product> findByProductNameAndIsDiscontinued(@Param("name") String name,
                                                      @Param("discontinued") boolean discontinued);
+
     @Query("""
             SELECT p FROM Product p
             WHERE p.unitprice BETWEEN :min AND :max
             AND p.discontinued = 0
             """)
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);
+
     List<Product> findByProductNameContaining(String name);
+
     List<Product> findByDiscontinued(boolean discontinued);
+
+    List<Product> findByCategoryCategoryName(String name);
+
+    List<Product> findBySupplierCountry(String country);
+    @Query("""
+            SELECT p FROM Product p
+            WHERE p.unitprice > (
+                SELECT AVG(p2.unitprice)
+                FROM Product p2
+            )
+            """)
+    List<Product> findByUnitpriceGreaterThanAverageUnitprice();
+    @Query("""
+            SELECT p FROM Product p
+            WHERE p.unitprice > (
+                SELECT AVG(p2.unitprice)
+                FROM Product p2
+                WHERE p2.categoryId = p.categoryId
+            )
+            """)
+    List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
 }
 /*
 Implementazione dei seguenti metodi più test.
