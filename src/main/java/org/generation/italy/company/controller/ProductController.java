@@ -86,4 +86,14 @@ public class ProductController {
         }
         return ResponseEntity.ok(summaryFromProduct(product));
     }
+//    @GetMapping
+//    public List<ProductDTO> findProducts(@RequestParam(required = false) String categoryName){
+//        List<Product> products;
+//        if (categoryName ==null) {
+//            products = service.findAll();
+//        }else{
+//            products= service.findByCategoryName(categoryName);
+//        }
+//        return products.stream().map(ProductDTO::fromProduct).toList();
+//    }
 }

@@ -21,13 +21,21 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             WHERE p.unitprice BETWEEN :min AND :max
             AND p.discontinued = 0
             """)
+
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);
     List<Product> findByProductNameContaining(String name);
     List<Product> findByDiscontinued(boolean discontinued);
+    @Query("""
+    SELECT p FROM Product p
+    WHERE(SELECT c.categoryName
+    FROM Category c
+    WHERE c.categoryName = categoryName)
+    """)
+    List<Product> findByCategoryNameContaining(String categoryName);
 }
 /*
 Implementazione dei seguenti metodi più test.
-1) Metodo che ritorna tutti i prodotti che appartengono ad una categoria il cui nome viene dato in input
+1) Metodo che ritorna tutti i prodotti che appartengono a una categoria il cui nome viene dato in input
 2) metodo che ritorna tutti i prodotti che appartengono a un supplier che vivono in una country che viene dato in input
 3) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti
 4) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti della stessa categoria
