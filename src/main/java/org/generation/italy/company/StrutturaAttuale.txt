@@ -1,0 +1,15 @@
+Struttura attuale:
+
+    controller → REST controller (ora hai solo ProductController)
+
+    dto → oggetti di trasferimento dati (per Product)
+
+    model → entità JPA (Customer, Order, ecc.)
+
+    repository.abstraction → interfacce repository
+
+    service.abstraction → interfacce service
+
+    service.implementation → implementazioni concrete (es. ProductServiceJpa)
+
+    CompanyApplication → main Spring Boot
