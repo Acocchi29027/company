@@ -1,17 +1,15 @@
 package org.generation.italy.company.repository.abstraction;
 
-import jakarta.transaction.Transactional;
 import org.generation.italy.company.model.Product;
-import org.generation.italy.company.model.Supplier;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
@@ -33,59 +31,57 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     //1
     @Query("""   
             SELECT p
-            FROM Product p 
+            FROM Product p
             JOIN p.category c
             WHERE c.categoryName = :name
             """)
     List<Product> findByCategoryName (@Param("name")String name);
-//    //2
-//    @Query("""
-//            SELECT p
-//            FROM Product p
-//            JOIN p.supplier s
-//            WHERE s.country = :country
-//            """)
-//    List<Product> findByContrySupplier(@Param("country")String country);
-//    //3
-//    @Query("""
-//            SELECT p
-//            FROM Product p
-//            WHERE p.unitprice > (
-//               SELECT AVG(p2.unitprice)
-//               FROM Product p2)
-//              AND p.name = :name
-//            """)
-//    List<Product> findByAvgPrice(@Param("name")String roductName);
-//    //4
-//    @Query("""
-//             SELECT p
-//             FROM Product p
-//             WHERE p.unitprice > (
-//               SELECT AVG(p2.unitprice)
-//               FROM Product p2)
-//             AND p.categoryId = :id
-//             """)
-//    List<Product> findByAvgPriceCategory(@Param("id")Integer productId);
-//    //5
-//    @Query("""
-//            SELECT p.
-//            FROM Product p
-//            WHERE NOT EXISTS (
-//                SELECT od
-//                FROM OrderDetails od
-//                WHERE od.product=p.product )
-//            """)
-//    //6
-//    List<Product> findProductsNeverOrdered();
-//    @Query("""
-//            SELECT p
-//            FROM Product p
-//            JOIN p.OrderDetails od
-//            GROP BY p
-//            ORDER BY SUM (od.qty) DESC
-//            """) // non posso usare limit allora creerò un ogetto di tipo Pageable gli darò in input (0 per indicare la prima pagina
-//                 // ,3 i primi tre risultati) e il metodo associato a questa query lp prenderà in input
-//    List<Product> findTop3OrderedProduct(Pageable pageable);
+    //2
+    @Query("""
+            SELECT p
+            FROM Product p
+            JOIN p.supplier s
+            WHERE s.country = :country
+            """)
+    List<Product> findBySupplierCountry(@Param("country")String country);
+    //3
+    @Query("""
+            SELECT p
+            FROM Product p
+            WHERE p.unitprice > (
+               SELECT AVG(p2.unitprice)
+               FROM Product p2 )
+            """)
+    List<Product> findByAvgPrice();
+    //4
+    @Query("""
+             SELECT p1
+             FROM Product p1
+             WHERE p1.unitprice > (
+               SELECT AVG(p2.unitprice)
+               FROM Product p2
+               WHERE p2.category = p1.category)
+             """)
+    List<Product> findByAvgPriceCategory();
+    //5 //il prodotto in questa linea d'ordine è uguale al prodotto selezionato
+    @Query("""
+            SELECT p
+            FROM Product p
+            WHERE NOT EXISTS (
+                SELECT od
+                FROM OrderDetails od
+                WHERE od.product = p )
+            """)
+    List<Product> findProductsNeverOrdered();
+
+    @Query("""
+            SELECT od.product
+            FROM OrderDetails od
+            GROUP BY od.product
+            ORDER BY SUM (od.qty) DESC
+            """) // non posso usare limit allora creerò un oggetto di tipo Pageable gli darò in input (0 per indicare la prima pagina
+                 // ,3 i primi tre risultati) e il metodo associato a questa query la prenderà in input
+    Page<Product> findTop3OrderedProduct(Pageable pageable);
 //    //7
 //    @Query("""
 //           SELECT p
