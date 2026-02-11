@@ -86,4 +86,11 @@ public class ProductController {
         }
         return ResponseEntity.ok(summaryFromProduct(product));
     }
+    @GetMapping("/category/{name}")
+    public List<ProductDTO> findByCategory(@PathVariable String name) {
+        return service.findByCategoryName(name)
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
 }

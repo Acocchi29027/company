@@ -6,6 +6,7 @@ import org.generation.italy.company.service.abstraction.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,46 @@ public class ProductServiceJpa implements ProductService {
     @Override
     public List<Product> findByProductNameAndIsDiscontinued(String name, Boolean discontinued) {
         return repo.findByProductNameAndIsDiscontinued(name, discontinued);
+    }
+
+    @Override
+    public List<Product> findByCategoryName(String name) {
+        return repo.findByCategoryName(name);
+    }
+
+    @Override
+    public List<Product> findBySupplierCountry(String country) {
+        return repo.findBySupplierCountry(country);
+    }
+
+    @Override
+    public List<Product> findProductsAboveAveragePrice() {
+        return repo.findProductsAboveAveragePrice();
+    }
+
+    @Override
+    public List<Product> findProductsAboveCategoryAverage() {
+        return repo.findProductsAboveCategoryAverage();
+    }
+
+    @Override
+    public List<Product> findProductsNeverOrdered() {
+        return repo.findProductsNeverOrdered();
+    }
+
+    @Override
+    public List<Product> findProductsSoldByEmployee(int empId) {
+        return repo.findProductsSoldByEmployee(empId);
+    }
+
+    @Override
+    public List<Product> findProductsNotOrderedSince(LocalDate date) {
+        return repo.findProductsNotOrderedSince(date);
+    }
+
+    @Override
+    public List<Product> findAvailableProductsInPriceRange(double min, double max) {
+        return repo.findAvailableProductsInPriceRange(min, max);
     }
 
     @Override
