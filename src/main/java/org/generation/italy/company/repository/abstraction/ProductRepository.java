@@ -1,5 +1,6 @@
 package org.generation.italy.company.repository.abstraction;
 
+import org.generation.italy.company.model.Employee;
 import org.generation.italy.company.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -44,14 +45,40 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             WHERE p.unitprice > (
                 SELECT AVG(p2.unitprice)
                 FROM Product p2
-                WHERE p2.categoryId = p.categoryId
+                WHERE p2.category.categoryId = p.category.categoryId
             )
             """)
     List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+    @Query("""
+            SELECT p FROM Product p
+            WHERE (
+                SELECT COUNT(*)
+                FROM OrderDetails o
+                WHERE o.product.productId = p.productId
+            ) = 0
+            """)
+    List<Product> findByNoOrders();
+    @Query("""
+            SELECT p FROM Product p
+            WHERE p.productId IN (
+                SELECT o.product.productId FROM OrderDetails o
+                GROUP BY o.product.productId
+                ORDER BY COUNT(*)
+                LIMIT 3
+            )
+            """)
+    List<Product> findByInThreeMostOrdered();
+    @Query("""
+            SELECT p FROM Product p
+            JOIN OrderDetails od ON p.productId = od.product.productId
+            JOIN Order o ON o.orderId = od.order.orderId
+            WHERE o.employee.empId = :#{#emp.empId}
+            """)
+    List<Product> findByOrderEmployee(@Param("emp") Employee e);
 }
 /*
 Implementazione dei seguenti metodi più test.
-1) Metodo che ritorna tutti i prodotti che appartengono ad una categoria il cui nome viene dato in input
+1) Metodo che ritorna tutti i prodotti che appartengono a una categoria il cui nome viene dato in input
 2) metodo che ritorna tutti i prodotti che appartengono a un supplier che vivono in una country che viene dato in input
 3) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti
 4) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti della stessa categoria

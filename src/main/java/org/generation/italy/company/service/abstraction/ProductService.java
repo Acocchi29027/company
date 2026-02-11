@@ -1,6 +1,7 @@
 package org.generation.italy.company.service.abstraction;
 
 import org.generation.italy.company.dto.ProductDTO;
+import org.generation.italy.company.model.Employee;
 import org.generation.italy.company.model.Product;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface ProductService {
     List<Product> findBySupplierCountry(String country);
     List<Product> findByUnitpriceGreaterThanAverageUnitprice();
     List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+    List<Product> findByNoOrders();
+    List<Product> findByThreeMostOrdered();
+    List<Product> findByOrderEmployee(Employee e);
 }

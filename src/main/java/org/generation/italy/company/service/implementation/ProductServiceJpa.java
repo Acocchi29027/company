@@ -1,5 +1,6 @@
 package org.generation.italy.company.service.implementation;
 
+import org.generation.italy.company.model.Employee;
 import org.generation.italy.company.model.Product;
 import org.generation.italy.company.repository.abstraction.ProductRepository;
 import org.generation.italy.company.service.abstraction.ProductService;
@@ -87,5 +88,20 @@ public class ProductServiceJpa implements ProductService {
     @Override
     public List<Product> findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory() {
         return repo.findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+    }
+
+    @Override
+    public List<Product> findByNoOrders() {
+        return repo.findByNoOrders();
+    }
+
+    @Override
+    public List<Product> findByThreeMostOrdered() {
+        return repo.findByInThreeMostOrdered();
+    }
+
+    @Override
+    public List<Product> findByOrderEmployee(Employee e) {
+        return repo.findByOrderEmployee(e);
     }
 }

@@ -3,6 +3,7 @@ package org.generation.italy.company.controller;
 import org.generation.italy.company.dto.ProductDTO;
 import org.generation.italy.company.dto.ProductSummaryDTO;
 import org.generation.italy.company.model.Category;
+import org.generation.italy.company.model.Employee;
 import org.generation.italy.company.model.Product;
 import org.generation.italy.company.service.abstraction.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,11 @@ public class ProductController {
     @GetMapping
     public List<ProductDTO> findProducts(@RequestParam(required = false) String categoryName,
                                          @RequestParam(required = false) String supplierCountry,
-                                         @RequestParam(required = false) Boolean checkAveragePrice,
-                                         @RequestParam(required = false) Boolean checkSameCategory,
+                                         @RequestParam(required = false) Boolean aboveAverage,
+                                         @RequestParam(required = false) Boolean aboveCategoryAverage,
+                                         @RequestParam(required = false) Boolean noOrders,
+                                         @RequestParam(required = false) Boolean mostOrdered,
+                                         @RequestBody(required = false) Employee e,
                                          @RequestParam(required = false) String productName,
                                          @RequestParam(required = false) Boolean discontinued) {
         List<Product> products;
@@ -38,10 +42,16 @@ public class ProductController {
             products = service.findByCategoryName(categoryName);
         } else if (supplierCountry != null) {
             products = service.findBySupplierCountry(supplierCountry);
-        } else if (checkAveragePrice && checkSameCategory == null) {
+        } else if (aboveAverage != null && aboveAverage) {
             products = service.findByUnitpriceGreaterThanAverageUnitprice();
-        } else if (checkAveragePrice && checkSameCategory) {
+        } else if (aboveCategoryAverage != null && aboveCategoryAverage) {
             products = service.findByUnitpriceGreaterThanAverageUnitpriceAndSameCategory();
+        } else if (noOrders != null && noOrders) {
+            products = service.findByNoOrders();
+        } else if (mostOrdered != null && mostOrdered) {
+            products = service.findByThreeMostOrdered();
+        } else if (e != null) {
+            products = service.findByOrderEmployee(e);
         } else if(productName == null && discontinued == null) {
             products = service.findAll();
         } else if (productName == null) {
@@ -62,6 +72,15 @@ public class ProductController {
         }
         return ResponseEntity.notFound().build();
     }
+
+//    @GetMapping
+//    public ResponseEntity<?> findByOrderEmployee(@RequestBody Employee e) {
+//        List<Product> products = service.findByOrderEmployee(e);
+//        if (products.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(products.stream().map(ProductDTO::fromProduct).toList());
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable int id) {
