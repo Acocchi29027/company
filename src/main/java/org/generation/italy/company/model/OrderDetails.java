@@ -10,11 +10,13 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "orderid")
+
     @MapsId("orderId")
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "productid")
+
     @MapsId("productId")
     private Product product;
 
