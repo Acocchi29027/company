@@ -5,21 +5,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    @Query("""
-        SELECT c FROM Customer c 
-            WHERE LOWER(c.companyName) LIKE LOWER(CONCAT('%', :name, '%'))
-            AND c.region = :region    
-    """)
-    List<Customer> findByCompanyNameAndByRegion(@Param("name") String companyName, @Param("region") String region);
+public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
     @Query("""
-        SELECT c FROM Customer c
-                WHERE LOWER(c.city) = :city1
-        """)
-    List<Customer> findByCity(@Param("city1")String city1);
-    List<Customer> findByPostalCode(String postalcode);
-    List<Customer> findByCompanyName(String name);
+            SELECT c FROM Customer c
+            WHERE c.city = :city
+            """)
+    List <Customer> findByCityName (@Param("city")String city);
+    @Query("""
+            SELECT c FROM Customer c
+            WHERE c.companyName = :companyName
+            """)
+    List<Customer> findByCompanyname (@Param("companyName") String companyName);
 }

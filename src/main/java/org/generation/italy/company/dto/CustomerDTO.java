@@ -3,58 +3,41 @@ package org.generation.italy.company.dto;
 import org.generation.italy.company.model.Customer;
 
 public class CustomerDTO {
+    private Integer custId;
+    private String companyName;
+    private String contactName;
+    private String contactTitle;
+    private String address;
+    private String city;
+    private String region;
+    private String postalCode;
+    private String country;
+    private String phone;
+    private String fax;
 
-    protected Integer custId;
-    protected String companyName;
-    protected String contactName;
-    protected String city;
-    protected String country;
-    protected String phone;
-    protected String contactTitle;
-    protected String address;
-    protected String region;
-    protected String postalCode;
-    protected String fax;
-
-
-    public CustomerDTO(Integer custId,
-                       String companyName,
-                       String contactName,
-                       String city,
-                       String country,
-                       String phone,
-                       String contactTitle,
-                       String address,
-                       String region,
-                       String postalCode,
-                       String fax) {
+    public CustomerDTO(){}
+    public CustomerDTO(Integer custId, String companyName, String contactName, String contactTitle,
+                       String address, String city, String region, String postalCode,
+                       String country, String phone, String fax) {
         this.custId = custId;
         this.companyName = companyName;
         this.contactName = contactName;
-        this.city = city;
-        this.country = country;
-        this.phone = phone;
         this.contactTitle = contactTitle;
         this.address = address;
+        this.city = city;
         this.region = region;
         this.postalCode = postalCode;
+        this.country = country;
+        this.phone = phone;
         this.fax = fax;
     }
-
-    public static CustomerDTO summaryFromCustomer(Customer customer) {
-        return new CustomerDTO(
-                customer.getCustId(),
-                customer.getCompanyName(),
-                customer.getContactName(),
-                customer.getCity(),
-                customer.getCountry(),
-                customer.getPhone(),
-                customer.getContactTitle(),
-                customer.getAddress(),
-                customer.getRegion(),
-                customer.getPostalCode(),
-                customer.getFax()
-        );
+    public static CustomerDTO summaryFromCustomer (Customer c){
+        return  new CustomerDTO(c.getCustId(), c.getCompanyName(),c.getContactName(),c.getContactTitle(),
+                c.getAddress(),c.getCity(),c.getRegion(),c.getPostalCode(),c.getCountry(),c.getPhone(),c.getFax());
+    }
+    public Customer toEntity (){
+        return new Customer(custId,companyName,contactName,contactTitle,address,
+                city,region,postalCode,country,phone,fax);
     }
 
     public Integer getCustId() {
@@ -81,62 +64,6 @@ public class CustomerDTO {
         this.contactName = contactName;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public static CustomerDTO fromCustomer(Customer c) {
-        return new CustomerDTO(
-                c.getCustId(),
-                c.getCompanyName(),
-                c.getContactName(),
-                c.getCity(),
-                c.getCountry(),
-                c.getPhone(),
-                c.getContactTitle(),
-                c.getAddress(),
-                c.getRegion(),
-                c.getPostalCode(),
-                c.getFax()
-        );
-    }
-
-    public Customer toEntity() {
-        return new Customer(
-                custId,
-                companyName,
-                contactName,
-                contactTitle,   // contactTitle
-                address,   // address
-                city,
-                region,   // region
-                postalCode,   // postalCode
-                country,
-                phone,
-                fax    // fax
-        );
-    }
-
     public String getContactTitle() {
         return contactTitle;
     }
@@ -153,6 +80,14 @@ public class CustomerDTO {
         this.address = address;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public String getRegion() {
         return region;
     }
@@ -161,12 +96,28 @@ public class CustomerDTO {
         this.region = region;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getPostalCode() {
         return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getFax() {
