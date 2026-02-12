@@ -69,8 +69,4 @@ public class CustomerController {
         }
         return ResponseEntity.ok(result); //  ritorna 200 equivalente a --> return ResponseEntity.status(200).body(result);
     }
-
-    
-
-
 }

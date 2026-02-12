@@ -58,4 +58,28 @@ public class OrderDetails {
     public double getDiscount() {
         return discount;
     }
+
+    public void setId(OrderDetailsId id) {
+        this.id = id;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setUnitprice(double unitprice) {
+        this.unitprice = unitprice;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 }

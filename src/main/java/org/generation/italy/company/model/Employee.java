@@ -104,4 +104,60 @@ public class Employee {
     public Employee getManager() {
         return manager;
     }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setTitleOfCourtesy(String titleOfCourtesy) {
+        this.titleOfCourtesy = titleOfCourtesy;
+    }
+
+    public void setBirthdate(LocalDateTime birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setHiredate(LocalDateTime hiredate) {
+        this.hiredate = hiredate;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setPostalcode(String postalcode) {
+        this.postalcode = postalcode;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setManager(Employee manager) {
+        this.manager = manager;
+    }
 }

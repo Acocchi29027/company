@@ -109,4 +109,56 @@ public class Order {
     public String getShipRegion() {
         return shipRegion;
     }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public void setCustId(Customer custId) {
+        this.custId = custId;
+    }
+
+    public void setEmpId(Employee empId) {
+        this.empId = empId;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public void setRequiredDate(LocalDateTime requiredDate) {
+        this.requiredDate = requiredDate;
+    }
+
+    public void setShippedDate(LocalDateTime shippedDate) {
+        this.shippedDate = shippedDate;
+    }
+
+    public void setFreight(double freight) {
+        this.freight = freight;
+    }
+
+    public void setShipName(String shipName) {
+        this.shipName = shipName;
+    }
+
+    public void setShipAddress(String shipAddress) {
+        this.shipAddress = shipAddress;
+    }
+
+    public void setShipCity(String shipCity) {
+        this.shipCity = shipCity;
+    }
+
+    public void setShipRegion(String shipRegion) {
+        this.shipRegion = shipRegion;
+    }
+
+    public void setShipPostalCode(String shipPostalCode) {
+        this.shipPostalCode = shipPostalCode;
+    }
+
+    public void setShipCountry(String shipCountry) {
+        this.shipCountry = shipCountry;
+    }
 }
