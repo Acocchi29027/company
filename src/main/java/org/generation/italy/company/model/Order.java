@@ -23,6 +23,8 @@ public class Order {
     private LocalDateTime requiredDate;
     @Column(name = "shippeddate")
     private LocalDateTime shippedDate;
+    @Column(name = "shipperid")
+    private Integer shipperId;
     @Column(columnDefinition = "NUMERIC", name = "freight")
     private double freight;
     @Column(name = "shipname")
@@ -41,7 +43,7 @@ public class Order {
     public Order(){}
 
     public Order(Integer orderId, Customer customer, Employee employee, LocalDateTime orderDate, LocalDateTime requiredDate,
-                 LocalDateTime shippedDate, double freight, String shipName, String shipAddress, String shipCity,
+                 LocalDateTime shippedDate, int shipperId, double freight, String shipName, String shipAddress, String shipCity,
                  String shipRegion, String shipPostalCode, String shipCountry) {
         this.orderId = orderId;
         this.customer = customer;
@@ -49,6 +51,7 @@ public class Order {
         this.orderDate = orderDate;
         this.requiredDate = requiredDate;
         this.shippedDate = shippedDate;
+        this.shipperId = shipperId;
         this.freight = freight;
         this.shipName = shipName;
         this.shipAddress = shipAddress;
@@ -108,5 +111,13 @@ public class Order {
 
     public String getShipRegion() {
         return shipRegion;
+    }
+
+    public Integer getShipperId() {
+        return shipperId;
+    }
+
+    public void setShipperId(Integer shipperId) {
+        this.shipperId = shipperId;
     }
 }
