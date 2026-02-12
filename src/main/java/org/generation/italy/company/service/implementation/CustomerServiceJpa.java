@@ -12,15 +12,10 @@ import java.util.Optional;
 public class CustomerServiceJpa  implements CustomerService {
 
     private CustomerRepository repo;
-
     @Autowired
     public CustomerServiceJpa(CustomerRepository repo) {
         this.repo = repo;
-        System.out.println("*************************************");
-        System.out.println(repo.getClass().getName());
     }
-
-
     @Override
     public List<Customer> findAll() {
         return repo.findAll();
