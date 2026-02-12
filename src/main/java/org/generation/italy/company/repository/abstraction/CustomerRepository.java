@@ -5,22 +5,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-
-    @Query("""
-        SELECT c FROM Customer c
-        WHERE LOWER(c.companyName) LIKE LOWER(CONCAT('%', :name, '%'))
-    """)
-    List<Customer> searchByCompanyName(@Param("name") String name);
+public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
     @Query("""
-        SELECT c FROM Customer c
-        WHERE LOWER(c.contactName) LIKE LOWER(CONCAT('%', :name, '%'))
-    """)
-    List<Customer> searchByContactName(@Param("name") String name);
-
-    boolean searchByCompanyNameIgnoreCase(String companyName); // Questi non stanno in JpaRepository perché dipendono dai tuoi campi. Ecco perchè lo dichiaro
+            SELECT c FROM Customer c
+            WHERE c.city = :city
+            """)
+    List <Customer> findByCityName (@Param("city")String city);
+    @Query("""
+            SELECT c FROM Customer c
+            WHERE c.companyName = :companyName
+            """)
+    List<Customer> findByCompanyname (@Param("companyName") String companyName);
 }

@@ -13,10 +13,10 @@ public class Order {
     private Integer orderId;
     @ManyToOne
     @JoinColumn(name = "custid")
-    private Customer custId;
+    private Customer customer;
     @ManyToOne
     @JoinColumn(name = "empid")
-    private Employee empId;
+    private Employee employee;
     @Column(name = "orderdate")
     private LocalDateTime orderDate;
     @Column(name = "requireddate")
@@ -40,12 +40,12 @@ public class Order {
 
     public Order(){}
 
-    public Order(Integer orderId, Customer custId, Employee empId, LocalDateTime orderDate, LocalDateTime requiredDate,
+    public Order(Integer orderId, Customer customer, Employee employee, LocalDateTime orderDate, LocalDateTime requiredDate,
                  LocalDateTime shippedDate, double freight, String shipName, String shipAddress, String shipCity,
                  String shipRegion, String shipPostalCode, String shipCountry) {
         this.orderId = orderId;
-        this.custId = custId;
-        this.empId = empId;
+        this.customer = customer;
+        this.employee = employee;
         this.orderDate = orderDate;
         this.requiredDate = requiredDate;
         this.shippedDate = shippedDate;
@@ -62,12 +62,12 @@ public class Order {
         return orderId;
     }
 
-    public Customer getCustId() {
-        return custId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public Employee getEmpId() {
-        return empId;
+    public Employee getEmployee() {
+        return employee;
     }
 
     public LocalDateTime getOrderDate() {

@@ -1,14 +1,15 @@
 package org.generation.italy.company.repository.abstraction;
 
-import org.generation.italy.company.dto.ProductDTO;
 import org.generation.italy.company.model.Product;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,98 +22,112 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     List<Product> findByProductNameAndIsDiscontinued(@Param("name") String name,
                                                      @Param("discontinued") boolean discontinued);
-
     @Query("""
             SELECT p FROM Product p
             WHERE p.unitprice BETWEEN :min AND :max
             AND p.discontinued = 0
             """)
     List<Product> findAvailableProductsInPriceRange(@Param("min") double min, @Param("max") double max);
-
     List<Product> findByProductNameContaining(String name);
-
     List<Product> findByDiscontinued(boolean discontinued);
-
-    List<Product> findByCategoryCategoryName(String name); //1 es
-
-    List<Product> findBySupplierCountry(String country); //2 es
-
-    // es3
+    //1
+    @Query("""   
+            SELECT p
+            FROM Product p
+            JOIN p.category c
+            WHERE c.categoryName = :name
+            """)
+    List<Product> findByCategoryName (@Param("name")String name);
+    //2
     @Query("""
-            SELECT p 
+            SELECT p
+            FROM Product p
+            JOIN p.supplier s
+            WHERE s.country = :country
+            """)
+    List<Product> findBySupplierCountry(@Param("country")String country);
+    //3
+    @Query("""
+            SELECT p
             FROM Product p
             WHERE p.unitprice > (
-            SELECT AVG(p2.unitprice)
-            FROM Product p2
-            )
+               SELECT AVG(p2.unitprice)
+               FROM Product p2 )
             """)
-    List<Product> findProductsCostingMoreThanAverage();
-
-    // es4
+    List<Product> findByAvgPrice();
+    //4
     @Query("""
-            SELECT p1 
-            FROM Product p1
-            WHERE p1.unitprice > (
-            SELECT AVG(p2.unitprice)
-            FROM Product p2
-            WHERE p2.category = p1.category
-            )
-            """)
-    List<Product> findProductsCostingMoreThanCategoryAverage();
-
-    // es5
+             SELECT p1
+             FROM Product p1
+             WHERE p1.unitprice > (
+               SELECT AVG(p2.unitprice)
+               FROM Product p2
+               WHERE p2.category = p1.category)
+             """)
+    List<Product> findByAvgPriceCategory();
+    //5 //il prodotto in questa linea d'ordine è uguale al prodotto selezionato
     @Query("""
-                SELECT p
-                FROM Product p
-                WHERE NOT EXISTS (
-                    SELECT od
-                    FROM OrderDetails od
-                    WHERE od.product = p
-                )
+            SELECT p
+            FROM Product p
+            WHERE NOT EXISTS (
+                SELECT od
+                FROM OrderDetails od
+                WHERE od.product = p )
             """)
     List<Product> findProductsNeverOrdered();
 
-    // es6
     @Query("""
-               SELECT od.product
-                  FROM OrderDetails od
-                  GROUP BY od.product
-                  ORDER BY sum(od.qty) desc
-            """)
-    List<Product> findMostFrequentlyOrderedProducts(Pageable pageable); // Pageable = LIMIT in SQL
-
-    // es7
+            SELECT od.product
+            FROM OrderDetails od
+            GROUP BY od.product
+            ORDER BY SUM (od.qty) DESC
+            """) // non posso usare limit allora creerò un oggetto di tipo Pageable gli darò in input (0 per indicare la prima pagina
+                 // ,3 i primi tre risultati) e il metodo associato a questa query la prenderà in input
+    Page<Product> findTop3OrderedProduct(Pageable pageable);
+    //7
     @Query("""
-                SELECT DISTINCT p
+           SELECT DISTINCT p
+           FROM Product p
+           JOIN OrderDetails od
+           ON od.product = p
+           JOIN od.order o
+           WHERE o.employee.empId = :id
+           ORDER BY p.productId
+           """)
+    List<Product> findOrderByEmployee(@Param("id")Integer id);
+    //8
+    @Query("""
+            SELECT p
+            FROM Product p
+            WHERE NOT EXISTS (
+                SELECT od
                 FROM OrderDetails od
-                JOIN od.product p
-                JOIN od.order o
-                WHERE o.empId.empId = :employeeId
+                WHERE od.product = p
+                AND od.order.orderDate >= :data)
+            ORDER BY p.productId
             """)
-    // In JPQL di solito non scrivi ON perché non stai joinando “tabelle”, stai joinando relazioni tra entity già definite con @ManyToOne, @OneToMany, ecc.
-    List<Product> findProductsByEmployee(@Param("employeeId") Integer employeeId);
-
-    // es8
+    List<Product> findProductNotOrderedAfterDate(@Param("data") LocalDateTime orderDate);
+    //9
+//    @Transactional // ci indica che è un operzaione che si svolge in blocco in simultanea, sia qui che su Pgadmin
+    @Modifying (clearAutomatically = true, flushAutomatically = true)//una query di modifica come delete
     @Query("""
-                SELECT p
-                FROM Product p
-                WHERE NOT EXISTS (
-                    SELECT 1
-                    FROM OrderDetails od
-                    JOIN od.order o
-                    WHERE od.product = p
-                      AND o.orderDate >= :since
-                )
-            """)
-    List<Product> findProductsNotOrderedSince(@Param("since") LocalDateTime since);
-    // es9
-    /**
-     * Per il metodo 9 non serve JPQL perché puoi farlo con i metodi CRUD già pronti di Spring Data JPA:
-     *
-     * findById(...) (carica Product e Supplier)
-     *
-     * setSupplier(...) (modifica l’oggetto in memoria)
-     *
-     * save(...) (JPA fa l’UPDATE nel DB)
-     */
+           UPDATE Product p
+           SET p.supplier.supplierId = :supplierId
+           WHERE p.productId = :productId
+           """)
+    void updateSupplier(@Param("supplierId")int supplierId, @Param("productId")int productId);
+
 }
+
+/*
+Implementazione dei seguenti metodi più test.
+1) Metodo che ritorna tutti i prodotti che appartengono ad una categoria il cui nome viene dato in input
+2) metodo che ritorna tutti i prodotti che appartengono a un supplier che vivono in una country che viene dato in input
+3) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti
+4) Metodo che ritorna la lista di tutti i prodotti che costano più del costo medio dei prodotti della stessa categoria
+5) Metodo che ritorna tutti i prodotti che non sono mai stati ordinati
+6) Metodo che ritorna i tre prodotti che sono stati ordinati di più
+7) Metodo che ritorna la lista di tutti i prodotti la cui vendita è stata seguita da un impiegato che viene dato in input
+8) Metodo che ritorna lista di prodotti che non sono stati ordinati a partire da una certa data nel passato
+9) Metodo che va a segnare ad un prodotto con un certo id, un nuovo supplier di cui viene dato in input l'id
+ */

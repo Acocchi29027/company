@@ -15,8 +15,7 @@ public class CustomerDTO {
     private String phone;
     private String fax;
 
-    public CustomerDTO() {}
-
+    public CustomerDTO(){}
     public CustomerDTO(Integer custId, String companyName, String contactName, String contactTitle,
                        String address, String city, String region, String postalCode,
                        String country, String phone, String fax) {
@@ -32,73 +31,100 @@ public class CustomerDTO {
         this.phone = phone;
         this.fax = fax;
     }
-
-    public static CustomerDTO fromCustomer(Customer c) {
-        return new CustomerDTO(
-                c.getCustId(),
-                c.getCompanyName(),
-                c.getContactName(),
-                c.getContactTitle(),
-                c.getAddress(),
-                c.getCity(),
-                c.getRegion(),
-                c.getPostalCode(),
-                c.getCountry(),
-                c.getPhone(),
-                c.getFax()
-        );
+    public static CustomerDTO summaryFromCustomer (Customer c){
+        return  new CustomerDTO(c.getCustId(), c.getCompanyName(),c.getContactName(),c.getContactTitle(),
+                c.getAddress(),c.getCity(),c.getRegion(),c.getPostalCode(),c.getCountry(),c.getPhone(),c.getFax());
+    }
+    public Customer toEntity (){
+        return new Customer(custId,companyName,contactName,contactTitle,address,
+                city,region,postalCode,country,phone,fax);
     }
 
-    public Customer toEntity() {
-        return new Customer(
-                custId, companyName, contactName, contactTitle,
-                address, city, region, postalCode, country, phone, fax
-        );
+    public Integer getCustId() {
+        return custId;
     }
 
-    // getter/setter (come ProductDTO)
+    public void setCustId(Integer custId) {
+        this.custId = custId;
+    }
 
-    public Integer getCustId() {return custId;}
+    public String getCompanyName() {
+        return companyName;
+    }
 
-    public void setCustId(Integer custId) {this.custId = custId;}
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-    public String getCompanyName() {return companyName;}
+    public String getContactName() {
+        return contactName;
+    }
 
-    public void setCompanyName(String companyName) {this.companyName = companyName;}
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
 
-    public String getContactName() {return contactName;}
+    public String getContactTitle() {
+        return contactTitle;
+    }
 
-    public void setContactName(String contactName) {this.contactName = contactName;}
+    public void setContactTitle(String contactTitle) {
+        this.contactTitle = contactTitle;
+    }
 
-    public String getContactTitle() {return contactTitle;}
+    public String getAddress() {
+        return address;
+    }
 
-    public void setContactTitle(String contactTitle) {this.contactTitle = contactTitle;}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public String getAddress() {return address;}
+    public String getCity() {
+        return city;
+    }
 
-    public void setAddress(String address) {this.address = address;}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-    public String getCity() {return city;}
+    public String getRegion() {
+        return region;
+    }
 
-    public void setCity(String city) {this.city = city;}
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
-    public String getRegion() {return region;}
+    public String getCountry() {
+        return country;
+    }
 
-    public void setRegion(String region) {this.region = region;}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-    public String getPostalCode() {return postalCode;}
+    public String getPostalCode() {
+        return postalCode;
+    }
 
-    public void setPostalCode(String postalCode) {this.postalCode = postalCode;}
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 
-    public String getCountry() {return country;}
+    public String getPhone() {
+        return phone;
+    }
 
-    public void setCountry(String country) {this.country = country;}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-    public String getPhone() {return phone;}
+    public String getFax() {
+        return fax;
+    }
 
-    public void setPhone(String phone) {this.phone = phone;}
-
-    public String getFax() {return fax;}
-
-    public void setFax(String fax) {this.fax = fax;}
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
 }
