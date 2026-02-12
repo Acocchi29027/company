@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 @Service
-public class CustomerServiceJpa  implements CustomerService {
-
+public class CustomerServiceJPA implements CustomerService {
     private CustomerRepository repo;
     @Autowired
-    public CustomerServiceJpa(CustomerRepository repo) {
+    public CustomerServiceJPA(CustomerRepository repo) {
         this.repo = repo;
     }
+
     @Override
     public List<Customer> findAll() {
         return repo.findAll();
@@ -28,12 +28,12 @@ public class CustomerServiceJpa  implements CustomerService {
 
     @Override
     public boolean deleteById(int id) {
-        Optional<Customer> cs = repo.findById(id);
-        if(cs.isPresent()){
+        Optional<Customer> c = repo.findById(id);
+        if (c.isPresent()) {
             repo.deleteById(id);
-            return  true;
+            return true;
         }
-        return false ;
+        return false;
     }
 
     @Override
@@ -42,12 +42,28 @@ public class CustomerServiceJpa  implements CustomerService {
     }
 
     @Override
-    public List<Customer> findByCompanyName(String companyName) {
-        return repo.findByCompanyname(companyName);
+    public List<Customer> findByCompanyName(String name) {
+        return repo.findByCompanyName(name);
     }
+
+    @Override
+    public List<Customer> findByCity(String city) {
+        return repo.findByCity(city);
+    }
+
+    @Override
+    public List<Customer> findByCompanyNameAndByRegion(String companyname, String region) {
+        return repo.findByCompanyNameAndByRegion(companyname,region);
+    }
+
+    @Override
+    public List<Customer> findByPostalCode(String postalcode) {
+        return repo.findByPostalCode(postalcode);
+    }
+
     @Override
     public boolean update(Customer c) {
-        if (!repo.existsById(c.getCustId())) {
+        if (!repo.existsById(c.getCustId())){
             return false;
         }
         repo.save(c);
