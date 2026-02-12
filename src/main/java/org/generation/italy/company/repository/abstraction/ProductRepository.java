@@ -5,10 +5,12 @@ import org.generation.italy.company.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -82,35 +84,38 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """) // non posso usare limit allora creerò un oggetto di tipo Pageable gli darò in input (0 per indicare la prima pagina
                  // ,3 i primi tre risultati) e il metodo associato a questa query la prenderà in input
     Page<Product> findTop3OrderedProduct(Pageable pageable);
-//    //7
-//    @Query("""
-//           SELECT p
-//           FROM Product p
-//           JOIN p.OrderDetails od
-//           JOIN od.Order o
-//           WHERE o.empId.empid = :id
-//           """)
-//    List<Product> findOrderByEmployee(@Param("id")Integer id);
-//    //8
-//    @Query("""
-//            SELECT P
-//            FROM Product p
-//            WHERE NOT EXIST (
-//                SELECT od
-//                FROM OrderDetails od
-//                WHERE od.product = p
-//                AND od.order.orderDate >= :data)
-//            """)
-//    //9
-//    List<Product>findProductNotOrderderByDate(@Param("data")LocalDateTime orderDate);
+    //7
+    @Query("""
+           SELECT DISTINCT p
+           FROM Product p
+           JOIN OrderDetails od
+           ON od.product = p
+           JOIN od.order o
+           WHERE o.employee.empId = :id
+           ORDER BY p.productId
+           """)
+    List<Product> findOrderByEmployee(@Param("id")Integer id);
+    //8
+    @Query("""
+            SELECT p
+            FROM Product p
+            WHERE NOT EXISTS (
+                SELECT od
+                FROM OrderDetails od
+                WHERE od.product = p
+                AND od.order.orderDate >= :data)
+            ORDER BY p.productId
+            """)
+    List<Product> findProductNotOrderedAfterDate(@Param("data") LocalDateTime orderDate);
+    //9
 //    @Transactional // ci indica che è un operzaione che si svolge in blocco in simultanea, sia qui che su Pgadmin
-//    @Modifying //una query di modifica come delete
-//    @Query("""
-//           UPDATE Product p
-//           SET p.supplier = :supplier
-//           WHERE p.productId = :productId
-//           """)
-//    void updateSupplier(@Param("supplier")Supplier supplier, @Param("producId")Integer productId);
+    @Modifying (clearAutomatically = true, flushAutomatically = true)//una query di modifica come delete
+    @Query("""
+           UPDATE Product p
+           SET p.supplier.supplierId = :supplierId
+           WHERE p.productId = :productId
+           """)
+    void updateSupplier(@Param("supplierId")int supplierId, @Param("productId")int productId);
 
 }
 

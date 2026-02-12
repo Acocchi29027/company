@@ -1,6 +1,7 @@
 package org.generation.italy.company.repository.abstraction;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.generation.italy.company.CompanyApplication;
 import org.generation.italy.company.model.Category;
 import org.generation.italy.company.model.Product;
@@ -14,6 +15,8 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductRepositoryTest {
     private Category category;
     private Supplier supplier;
+    private Supplier supplier2;
     private Product product1;
     private Product product2;
     private final String FIND_AVG_UNIT_PRICE = "SELECT AVG(p.unitprice) FROM Product p";
@@ -54,15 +58,42 @@ class ProductRepositoryTest {
                                             ORDER BY COUNT (*) DESC
                                             LIMIT 3
                                             """;
+    private final String FIND_ORDERS_BY_EMPLOYEE = """
+                                           SELECT DISTINCT productid
+                                           FROM orderdetails od
+                                           JOIN orders o
+                                           USING(orderid)
+                                           WHERE o.empid = 1
+                                           ORDER BY productid;
+                                           """;
+    private final String FIND_PRODUCT_NOT_ORDERED_AFTER_DATE = """
+                                           SELECT productid
+                                           FROM products p
+                                           WHERE NOT EXISTS (
+                                               SELECT 1
+                                               FROM orderdetails od
+                                               JOIN orders o
+                                               USING(orderid)
+                                               WHERE od.productid = p.productid
+                                               AND o.orderdate >= '2008-01-01'
+                                               )
+                                           ORDER BY productid;
+                                           """;
+
     @BeforeEach
     public void setup(){
       category = new Category(null,"TEST_CAT_NAME", "TEST_CAT_DESC");
-      supplier = new Supplier(null,"TEST_COMP_NAME","TEST_CONTACT_NAME","TEST_CON_TITLE","TEST_ADDRESS","TEST_CITY"
-      ,"TEST_REGION","TEST_CODE","TEST_COUNTRY","TEST_PHONE","TEST_FAX");
+      supplier = new Supplier(null,"TEST_COMP_NAME","TEST_CONTACT_NAME",
+              "TEST_CON_TITLE","TEST_ADDRESS","TEST_CITY",
+              "TEST_REGION","TEST_CODE","TEST_COUNTRY","TEST_PHONE","TEST_FAX");
+      supplier2 = new Supplier(null,"TEST_COMP_NAME2","TEST_CONTACT_NAME2",
+              "TEST_CON_TITLE2","TEST_ADDRESS2", "TEST_CITY2","TEST_REGION2","TEST_CODE2",
+              "TEST_COUNTRY2","TEST_PHONE2","TEST_FAX2");
       product1 = new Product(null,"Coca-Cola",supplier,category,12,false);
       product2 = new Product(null,"Fanta",supplier,category,4,false);
       em.persist(category);
       em.persist(supplier);
+      em.persist(supplier2);
       em.persist(product1);
       em.persist(product2);
       em.flush(); //comando che si assicura che le persist salvino gli oggetti sul db
@@ -138,21 +169,35 @@ class ProductRepositoryTest {
 
     @Test
     void findTop3OrderedProduct() {
-        List<Number> topProducts = em.createNativeQuery(FIND_TOP3_ORDERED_PRODUCT, Number.class).getResultList();
+        List<Long> topProducts = em.createNativeQuery(FIND_TOP3_ORDERED_PRODUCT, Long.class).getResultList();
         Page<Product> top3Products = repo.findTop3OrderedProduct(PageRequest.of(0, 3));
         assertTrue(top3Products.stream().allMatch(p -> topProducts.stream()
                 .anyMatch(n -> n.intValue() == p.getProductId())));
     }
 
     @Test
-    void findOrderByEmployee() {
+    void findOrdersByEmployee() {
+        List<Integer> ids = em.createNativeQuery(FIND_ORDERS_BY_EMPLOYEE, Integer.class).getResultList();
+        List<Product> products = repo.findOrderByEmployee(1);
+        List<Integer> prodIds = products.stream().map(Product::getProductId).toList();
+        assertEquals(ids, prodIds);
     }
 
     @Test
-    void findProductNotOrderderByDate() {
+    void findProductNotOrderedAfterDate() {
+        List<Integer> ids = em.createNativeQuery(FIND_PRODUCT_NOT_ORDERED_AFTER_DATE, Integer.class).getResultList();
+        List<Product> products = repo.findProductNotOrderedAfterDate(LocalDateTime.of(2008, 1, 1,0,0));
+        List<Integer> prodIds = products.stream().map(Product::getProductId).toList();
+        assertEquals(ids, prodIds);
     }
 
     @Test
     void updateSupplier() {
+        assertEquals(supplier.getSupplierId(), product1.getSupplier().getSupplierId());
+        repo.updateSupplier(supplier2.getSupplierId(), product1.getProductId());
+//        em.clear();
+//        product1 = em.find(Product.class, product1.getProductId());
+        em.refresh(product1);
+        assertEquals(product1.getSupplier().getSupplierId(), supplier2.getSupplierId());
     }
 }
