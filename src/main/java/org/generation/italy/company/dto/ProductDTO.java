@@ -1,10 +1,7 @@
 package org.generation.italy.company.dto;
 
 import jakarta.persistence.*;
-import org.generation.italy.company.model.BooleanToIntegerConverter;
-import org.generation.italy.company.model.Category;
-import org.generation.italy.company.model.Product;
-import org.generation.italy.company.model.Supplier;
+import org.generation.italy.company.model.*;
 
 public class ProductDTO extends ProductSummaryDTO {
     private String supplierCompanyName;

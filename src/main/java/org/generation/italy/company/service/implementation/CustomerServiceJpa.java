@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class CustomerServiceJpa  implements CustomerService {
+
     private CustomerRepository repo;
 
     @Autowired
     public CustomerServiceJpa(CustomerRepository repo) {
         this.repo = repo;
+        System.out.println("*************************************");
+        System.out.println(repo.getClass().getName());
     }
+
 
     @Override
     public List<Customer> findAll() {
@@ -30,12 +33,12 @@ public class CustomerServiceJpa  implements CustomerService {
 
     @Override
     public boolean deleteById(int id) {
-        Optional<Customer> oc = repo.findById(id);
-        if (oc.isPresent()) {
+        Optional<Customer> cs = repo.findById(id);
+        if(cs.isPresent()){
             repo.deleteById(id);
-            return true;
+            return  true;
         }
-        return false;
+        return false ;
     }
 
     @Override
@@ -44,16 +47,15 @@ public class CustomerServiceJpa  implements CustomerService {
     }
 
     @Override
-    public List<Customer> findByCompanyName(String name) {
-        return repo.findByCompanyName(name);
+    public List<Customer> findByCompanyName(String companyName) {
+        return repo.findByCompanyname(companyName);
     }
-
     @Override
-    public boolean update(Customer customer) {
-        if ( !repo.existsById(customer.getCustId())){
+    public boolean update(Customer c) {
+        if (!repo.existsById(c.getCustId())) {
             return false;
         }
-        repo.save(customer);
+        repo.save(c);
         return true;
     }
 }

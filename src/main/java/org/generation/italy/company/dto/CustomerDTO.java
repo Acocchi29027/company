@@ -16,9 +16,9 @@ public class CustomerDTO {
     private String fax;
 
     public CustomerDTO(){}
-
-    public CustomerDTO(Integer custId, String companyName, String contactName, String contactTitle, String address,
-                       String city, String region, String postalCode, String country, String phone, String fax) {
+    public CustomerDTO(Integer custId, String companyName, String contactName, String contactTitle,
+                       String address, String city, String region, String postalCode,
+                       String country, String phone, String fax) {
         this.custId = custId;
         this.companyName = companyName;
         this.contactName = contactName;
@@ -31,14 +31,13 @@ public class CustomerDTO {
         this.phone = phone;
         this.fax = fax;
     }
-
-    public static CustomerDTO fromCustomer(Customer c){
-        return new CustomerDTO(c.getCustId(), c.getCompanyName(), c.getContactName(), c.getContactTitle(), c.getAddress(),
-                c.getCity(), c.getRegion(), c.getPostalCode(), c.getCountry(), c.getPhone(), c.getFax());
+    public static CustomerDTO summaryFromCustomer (Customer c){
+        return  new CustomerDTO(c.getCustId(), c.getCompanyName(),c.getContactName(),c.getContactTitle(),
+                c.getAddress(),c.getCity(),c.getRegion(),c.getPostalCode(),c.getCountry(),c.getPhone(),c.getFax());
     }
-
-    public Customer toEntity(){
-        return new Customer(custId,companyName,contactName,contactTitle,address,city,region,postalCode,country,phone,fax);
+    public Customer toEntity (){
+        return new Customer(custId,companyName,contactName,contactTitle,address,
+                city,region,postalCode,country,phone,fax);
     }
 
     public Integer getCustId() {
@@ -97,20 +96,20 @@ public class CustomerDTO {
         this.region = region;
     }
 
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
     public String getCountry() {
         return country;
     }
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getPhone() {
