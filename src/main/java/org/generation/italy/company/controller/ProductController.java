@@ -17,6 +17,7 @@ import static org.generation.italy.company.dto.ProductDTO.fromProduct;
 import static org.generation.italy.company.dto.ProductSummaryDTO.summaryFromProduct;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/products")
 public class ProductController {
     private ProductService service;
