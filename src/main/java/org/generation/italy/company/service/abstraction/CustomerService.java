@@ -12,5 +12,12 @@ public interface CustomerService {
         boolean deleteById(int id);
         Customer create(Customer c);
         List<Customer> findByCompanyName(String companyName);
+
+        List<Customer> findByCity(String city);
+
+        List<Customer> findByCompanyNameAndByRegion(String companyname, String region);
+
+        List<Customer> findByPostalCode(String postalcode);
+
         boolean update(Customer customer);
 }
