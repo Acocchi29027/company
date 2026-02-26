@@ -89,4 +89,9 @@ public class ProductServiceJpa implements ProductService {
         p.setSupplier(os.get());
         return true;
     }
+
+    @Override
+    public List<Supplier> getSupplierMinimals() {
+        return supplierRepo.findAll();
+    }
 }
