@@ -102,7 +102,7 @@ ProductController {
             // build() crea la ResponseEntity "senza body" (solo status code)
         }
 
-        return ResponseEntity.ok(service.findByCategoryCategoryName(categoryname)); // Body + Status code 200
+        return ResponseEntity.ok(service.findByCategoryName(categoryname)); // Body + Status code 200
     }
 
     // 2 es. - Prodotti di supplier che vivono in una country data

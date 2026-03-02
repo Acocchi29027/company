@@ -1,14 +1,17 @@
 package org.generation.italy.company.service.implementation;
 
 import jakarta.transaction.Transactional;
+import org.generation.italy.company.dto.ProductDTO;
 import org.generation.italy.company.model.Product;
 import org.generation.italy.company.model.Supplier;
 import org.generation.italy.company.repository.abstraction.ProductRepository;
 import org.generation.italy.company.repository.abstraction.SupplierRepository;
 import org.generation.italy.company.service.abstraction.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,4 +92,70 @@ public class ProductServiceJpa implements ProductService {
         p.setSupplier(os.get());
         return true;
     }
+
+    @Override
+    public List<ProductDTO> findMostFrequentlyOrderedProducts(Pageable pageable) {
+        return productRepo.findTop3OrderedProduct(pageable)
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findByCategoryName(String name) {
+        return productRepo.findByCategoryName(name)
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findBySupplierCountry(String country) {
+        return productRepo.findBySupplierCountry(country)
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findProductsCostingMoreThanAverage() {
+        return productRepo.findByAvgPrice()
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findProductsCostingMoreThanCategoryAverage() {
+        return productRepo.findByAvgPriceCategory()
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findProductsNeverOrdered() {
+        return productRepo.findProductsNeverOrdered()
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findProductsByEmployee(Integer employeeId) {
+        return productRepo.findOrderByEmployee(employeeId)
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> findProductsNotOrderedSince(LocalDate since) {
+        return productRepo.findProductNotOrderedAfterDate(since.atStartOfDay())
+                .stream()
+                .map(ProductDTO::fromProduct)
+                .toList();
+    }
+
+
 }
