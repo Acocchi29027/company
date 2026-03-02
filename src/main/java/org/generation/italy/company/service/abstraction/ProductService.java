@@ -2,6 +2,7 @@ package org.generation.italy.company.service.abstraction;
 
 import org.generation.italy.company.dto.ProductDTO;
 import org.generation.italy.company.model.Product;
+import org.generation.italy.company.model.Supplier;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,6 @@ public interface ProductService {
     List<Product> findByProductNameAndIsDiscontinued(String name, Boolean discontinued);
     boolean update(Product product);
     boolean updateProductSupplier(int productId, int supplierId);
+
+    List<Supplier> getSupplierMinimals();
 }

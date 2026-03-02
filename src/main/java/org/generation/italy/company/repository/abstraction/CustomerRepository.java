@@ -20,4 +20,12 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
             WHERE c.companyName = :companyName
             """)
     List<Customer> findByCompanyname (@Param("companyName") String companyName);
+
+    List<Customer> findByCompanyName(String name);
+
+    List<Customer> findByCity(String city);
+
+    List<Customer> findByCompanyNameAndRegion(String companyname, String region);
+
+    List<Customer> findByPostalCode(String postalcode);
 }

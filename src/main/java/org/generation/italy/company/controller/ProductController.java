@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static org.generation.italy.company.dto.ProductDTO.fromProduct;
 import static org.generation.italy.company.dto.ProductSummaryDTO.summaryFromProduct;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
