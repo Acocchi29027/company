@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class CustomerServiceJpa  implements CustomerService {
-
+//facciamo un costruttore per iniettare il repository
     private CustomerRepository repo;
 
     @Autowired
