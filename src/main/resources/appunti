@@ -1,0 +1,6 @@
+Il DataSource e il Connection Pooling
+
+Il DataSource non è una connessione, ma una fabbrica/gestore di connessioni. La sua funzione magica si chiama Connection Pooling.
+Quando l'app parte, il DataSource apre (ad esempio) 10 connessioni e le tiene pronte in un "parcheggio" (il Pool).
+Quando la tua Repository chiede di fare una query, il DataSource le presta una connessione già aperta.
+Finita la query, la connessione non viene chiusa, ma torna nel parcheggio pronta per un altro utente.
